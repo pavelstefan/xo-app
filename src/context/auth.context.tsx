@@ -9,7 +9,7 @@ export interface IAuthContext {
 }
 
 const context = createContext<IAuthContext>({
-    login: async (email: string, password: string) => {
+    login: async (_email: string, _password: string) => {
     }
 })
 
