@@ -8,6 +8,10 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import AppState from "./context/app-state";
+import CssBaseline from "@mui/material/CssBaseline";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+
+const defaultTheme = createTheme();
 
 
 const root = ReactDOM.createRoot(
@@ -16,7 +20,13 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <AppState>
-            <App/>
+            <ThemeProvider theme={defaultTheme}>
+                {/*<Container component="main" maxWidth="xs">*/}
+                <CssBaseline/>
+                <App/>
+                {/*</Container>*/}
+            </ThemeProvider>
+
         </AppState>
     </React.StrictMode>
 );
