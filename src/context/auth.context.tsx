@@ -1,11 +1,13 @@
 import React, {createContext, useContext, useState} from 'react'
-import {login} from "../api";
+import {loadMe, login} from "../api";
+import {User} from "../types";
 
 export interface IAuthContext {
     token?: string;
-    login: (email: string, password: string) => Promise<void>
-    isLoading?: boolean,
-    error?: string
+    login: (email: string, password: string) => Promise<void>;
+    isLoading?: boolean;
+    error?: string;
+    user?: User;
 }
 
 const context = createContext<IAuthContext>({
@@ -18,6 +20,7 @@ const AuthContext: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
     const [token, setToken] = useState<string>('')
+    const [user, setUser] = useState<User | undefined>()
 
     const handleLogin = async (email: string, password: string) => {
         try {
@@ -25,6 +28,8 @@ const AuthContext: React.FC<{ children: React.ReactNode }> = ({children}) => {
             setIsLoading(true)
             const data = await login(email, password)
             setToken(data.accessToken)
+            const user = await loadMe(data.accessToken)
+            setUser(user)
         } catch (e: unknown) {
             setError(e as string)
         }
@@ -35,7 +40,8 @@ const AuthContext: React.FC<{ children: React.ReactNode }> = ({children}) => {
         isLoading,
         token,
         login: handleLogin,
-        error
+        error,
+        user
     }
     return (
         <context.Provider value={value}>{children}</context.Provider>

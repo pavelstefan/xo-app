@@ -1,4 +1,4 @@
-import {AuthResponse} from "../types";
+import {AuthResponse, User} from "../types";
 
 export const login = async (email: string, password: string): Promise<AuthResponse> => new Promise<AuthResponse>(async (resolve, reject) => {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
@@ -20,5 +20,23 @@ export const login = async (email: string, password: string): Promise<AuthRespon
     } catch (e) {
         reject('Something went wrong, try again')
     }
-
 })
+
+export const loadMe = async (token: string) => new Promise<User>(async (resolve, reject) => {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/user/me`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    })
+    if (res.status !== 200)
+        reject('Check your credentials')
+
+    try {
+        const data = await res.json() as User
+        resolve(data)
+    } catch (e) {
+        reject('Something went wrong, try again')
+    }
+})
+

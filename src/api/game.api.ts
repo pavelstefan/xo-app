@@ -33,9 +33,7 @@ export const createGame = async (token: string): Promise<Game> => new Promise<Ga
 
 
 export const loadGame = async (gameId: number): Promise<Game> => new Promise<Game>(async (resolve, reject) => {
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
-        method: 'POST',
-    })
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`)
     if (res.status !== 200)
         reject('Something went wrong, try again')
 

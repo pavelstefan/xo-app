@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useState} from 'react'
-import {Game, GameStatus} from "../types";
-import {createGame, joinGame, loadGame, loadGames} from "../api";
+import {Game, GameCell, GameStatus} from "../types";
+import {createGame, joinGame, loadGame, loadGames, sendMove} from "../api";
 import {useAuth} from "./auth.context";
 
 export interface IGameContext {
@@ -9,8 +9,12 @@ export interface IGameContext {
     activeGame?: Game;
     loadGames: () => Promise<void>
     playGame: (game: Game) => Promise<void>;
+    refreshActiveGame: (game: Game) => Promise<void>;
     error?: string;
-    createGame: () => Promise<void>
+    createGame: () => Promise<void>;
+    selectCell: (_game: Game, cell: GameCell) => Promise<void>;
+    getIsMyTurn: () => boolean;
+    closeGame: () => void;
 }
 
 const context = createContext<IGameContext>({
@@ -21,6 +25,13 @@ const context = createContext<IGameContext>({
     createGame: async () => {
     },
     playGame: async (_game: Game) => {
+    },
+    refreshActiveGame: async (_game: Game) => {
+    },
+    selectCell: async () => {
+    },
+    getIsMyTurn: () => false,
+    closeGame: () => {
     }
 })
 
@@ -80,6 +91,26 @@ const GameContext: React.FC<{ children: React.ReactNode }> = ({children}) => {
         setIsLoading(false)
     }
 
+    const handleRefreshGame = async (game: Game) => {
+        setActiveGame(await loadGame(game.id))
+    }
+
+    const handleSendMove = async (game: Game, cell: GameCell) => {
+        if (auth.token)
+            setActiveGame(await sendMove(auth.token, game.id, cell))
+    }
+
+    const getIsMyTurn = (): boolean => {
+        if (!activeGame || !auth.user)
+            return false
+
+        return auth.user.id === activeGame.playerToMove;
+    }
+
+    const closeGame = () => {
+        setActiveGame(undefined)
+    }
+
     const value: IGameContext = {
         isLoading,
         games,
@@ -87,7 +118,11 @@ const GameContext: React.FC<{ children: React.ReactNode }> = ({children}) => {
         error,
         playGame: handlePlayGame,
         loadGames: handleLoadGames,
-        createGame: handleCreateGame
+        createGame: handleCreateGame,
+        refreshActiveGame: handleRefreshGame,
+        selectCell: handleSendMove,
+        getIsMyTurn,
+        closeGame
     }
     return (
         <context.Provider value={value}>{children}</context.Provider>
