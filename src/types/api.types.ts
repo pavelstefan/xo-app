@@ -31,7 +31,7 @@ export interface Game {
     id: number;
     users: UsersOnGames[];
     winnerId?: number;
-    moves: Move[]
+    moves?: Move[]
     playerToMove: number
     status: GameStatus
 }

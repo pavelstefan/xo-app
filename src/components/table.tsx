@@ -13,7 +13,7 @@ const tableConfig = [
 const getCellColor = (cell: GameCell, game: Game, me: User): CellColor => {
     let color = CellColor.NONE;
 
-    for (let move of game.moves) {
+    for (let move of (game.moves || [])) {
         if (move.cell === cell) {
             color = me.id === move.userId ? CellColor.P1 : CellColor.P2;
         }
@@ -28,12 +28,14 @@ const Table: React.FC = () => {
 
     return (
         <Stack gap={'2px'} width='30rem' height='30rem'>
-            {tableConfig.map(line => (
-                <div style={{display: 'flex', flexDirection: 'row', gap: '2px', width: '30rem', height: '10rem'}}>
-                    {line.map(cell => <Cell color={getCellColor(cell, gameCtx.activeGame!, auth.user!)} onClick={() => {
-                        if (gameCtx.getIsMyTurn())
-                            gameCtx.selectCell(gameCtx.activeGame!, cell).catch(console.error)
-                    }}/>)}
+            {tableConfig.map((line, index) => (
+                <div key={`line-${index}`}
+                     style={{display: 'flex', flexDirection: 'row', gap: '2px', width: '30rem', height: '10rem'}}>
+                    {line.map(cell => <Cell key={cell} color={getCellColor(cell, gameCtx.activeGame!, auth.user!)}
+                                            onClick={() => {
+                                                if (gameCtx.getIsMyTurn())
+                                                    gameCtx.selectCell(gameCtx.activeGame!, cell).catch(console.error)
+                                            }}/>)}
                 </div>
             ))}
         </Stack>

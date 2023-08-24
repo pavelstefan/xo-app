@@ -6,7 +6,7 @@ import Lobby from "./pages/lobby";
 function App() {
     const auth = useAuth()
 
-    if (!auth.token) {
+    if (!auth.user) {
         return <Auth/>
     }
 

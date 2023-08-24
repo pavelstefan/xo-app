@@ -39,6 +39,9 @@ export const loadGame = async (gameId: number): Promise<Game> => new Promise<Gam
 
     try {
         const data = await res.json() as Game
+        if (!data.moves) {
+            data.moves = []
+        }
         resolve(data)
     } catch (e) {
         reject('Something went wrong, try again')

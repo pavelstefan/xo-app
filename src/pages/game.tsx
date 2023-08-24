@@ -34,6 +34,15 @@ const Game: React.FC = () => {
         </span>
     )
 
+    if (gameCtx.activeGame?.status === GameStatus.active) {
+        msg = (
+            <span>Game #{gameCtx.activeGame?.id} | {
+                gameCtx.getIsMyTurn() ? 'your turn to move' : 'wait for opponent to move'
+            }
+            </span>
+        )
+    }
+
     if (gameCtx.activeGame?.status === GameStatus.ended_draw) {
         msg = (
             <span>Game #{gameCtx.activeGame?.id} | ended as draw</span>

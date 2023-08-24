@@ -47,7 +47,7 @@ const GameContext: React.FC<{ children: React.ReactNode }> = ({children}) => {
             setError('')
             setIsLoading(true)
 
-            if (game.status === GameStatus.open) {
+            if (game.status === GameStatus.open && (auth.user?.id !== game.users[0].userId && auth.user?.id !== game.users[1]?.userId)) {
                 if (!auth.token) {
                     setError('Please login')
                     setIsLoading(false)

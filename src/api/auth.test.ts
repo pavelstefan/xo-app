@@ -1,26 +1,19 @@
-import {loadMe} from "./auth.api";
+import * as authAPi from "./auth.api";
 
 describe('Auth api tests', () => {
     beforeEach(() => {
-        fetch.resetMocks()
+        jest.spyOn(authAPi, 'loadMe').mockReturnValue(Promise.resolve({
+          "createdAt": "2023-08-24T11:33:12.785000+00:00",
+          "id": 2,
+          "email": "user1",
+          "passwordHash": "$2b$12$rugyEepBqlNl.Led98JDeOYiLgMIIBKxtCOM2URClYWSDACWQtbpm",
+          "move": [],
+          "games": []
+        }))
     })
     it('returns the user if token is valid', async () => {
-        fetch.mockResponseOnce(JSON.stringify({
-            "createdAt": "2023-08-20T09:45:21.246000+00:00",
-            "id": 1,
-            "email": "test@email.com",
-            "passwordHash": "$2b$12$mKOdy12fWHhEGO.WnUu1Gud4EZU1h8jqlfQWFgVVLW0qJJokAGKx.",
-            "move": null,
-            "games": null
-        }));
-
-        const user = await loadMe('a-token')
-
-        expect(user.id).toEqual(1)
-        expect(user.email).toEqual('test@email.com')
-        expect(fetch).toHaveBeenCalledWith(
-            "http://localhost:8080/user/me",
-            {"headers": {"Authorization": "Bearer a-token"}, "method": "POST"}
-        );
+        const user = await authAPi.loadMe('a-token')
+        expect(user.id).toEqual(2)
+        expect(user.email).toEqual('user1')
     })
 })

@@ -4,14 +4,20 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {Game, GameStatus} from "../types";
+import {Game, GameStatus, User} from "../types";
 
 export interface IGameCard {
     game: Game;
     handleAction: () => void;
+    user: User
 }
 
-const GameCard: React.FC<IGameCard> = ({game, handleAction}) => {
+const GameCard: React.FC<IGameCard> = ({game, handleAction, user}) => {
+    let msg = 'Join game'
+    if (game.status !== GameStatus.open || (user.id === game.users[0].userId || user.id === game.users[1]?.userId)) {
+        msg = 'Open game'
+    }
+
     return (
         <Card sx={{minWidth: 275}}>
             <CardContent>
@@ -23,8 +29,7 @@ const GameCard: React.FC<IGameCard> = ({game, handleAction}) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button onClick={handleAction}
-                        size="small">{game.status === GameStatus.open ? 'Join Game' : 'Open Game'}</Button>
+                <Button onClick={handleAction} size="small">{msg}</Button>
             </CardActions>
         </Card>
     )

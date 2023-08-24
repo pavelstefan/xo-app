@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useGame} from "../context";
+import {useAuth, useGame} from "../context";
 import Box from "@mui/material/Box";
 import GameCard from "../components/GameCard";
 import Fab from '@mui/material/Fab';
@@ -8,6 +8,7 @@ import Game from "./game";
 
 const Lobby: React.FC = () => {
     const gameCtx = useGame()
+    const auth = useAuth()
 
     useEffect(() => {
         gameCtx.loadGames().catch(console.log)
@@ -23,7 +24,7 @@ const Lobby: React.FC = () => {
                 <AddIcon/>
             </Fab>
             {gameCtx.games.map(game => (
-                <GameCard key={game.id} game={game} handleAction={() => gameCtx.playGame(game)}/>)
+                <GameCard key={game.id} game={game} handleAction={() => gameCtx.playGame(game)} user={auth.user!}/>)
             )}
         </Box>
     )
