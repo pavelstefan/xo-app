@@ -13,7 +13,7 @@ interface ICell {
 
 const Cell: React.FC<ICell> = ({color, onClick}) => {
     return (
-        <div onClick={onClick}
+        <div data-testid="cell" onClick={onClick}
              style={{
                  flex: 1,
                  backgroundColor: color,
