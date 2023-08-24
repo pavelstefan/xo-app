@@ -16,6 +16,7 @@ const Auth: React.FC = () => {
     };
     return (
         <Box
+            data-testid='auth-page'
             sx={{
                 marginTop: 8,
                 display: 'flex',
@@ -25,6 +26,7 @@ const Auth: React.FC = () => {
         >
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                 <TextField
+                    data-testid='email'
                     margin="normal"
                     required
                     fullWidth
@@ -43,8 +45,10 @@ const Auth: React.FC = () => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    data-testid='password'
                 />
                 <Button
+                    data-testid='login-btn'
                     disabled={auth.isLoading}
                     type="submit"
                     fullWidth

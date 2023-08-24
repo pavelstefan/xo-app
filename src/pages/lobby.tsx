@@ -18,7 +18,7 @@ const Lobby: React.FC = () => {
     }
 
     return (
-        <Box sx={{display: "flex", flexWrap: "wrap", gap: 2, width: '100vw', padding: 2}}>
+        <Box data-testid='lobby-page' sx={{display: "flex", flexWrap: "wrap", gap: 2, width: '100vw', padding: 2}}>
             <Fab color="primary" aria-label="add" onClick={gameCtx.createGame}>
                 <AddIcon/>
             </Fab>

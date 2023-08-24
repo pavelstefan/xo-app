@@ -1,16 +1,20 @@
 import React from 'react'
 import Cell, {CellColor} from "./cell";
 import {render, screen} from "@testing-library/react";
+import userEvent from '@testing-library/user-event'
 
 test('render empty cell', () => {
+    const cb = jest.fn()
     render(
-        <Cell color={CellColor.NONE} onClick={() => undefined}/>
+        <Cell color={CellColor.NONE} onClick={cb}/>
     )
     const elem = screen.getByTestId('cell')
     expect(elem).toBeInTheDocument()
     expect(elem).toHaveStyle({
         backgroundColor: CellColor.NONE
     })
+    userEvent.click(elem)
+    expect(cb).toBeCalledTimes(1)
 })
 
 test.each([
